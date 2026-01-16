@@ -9,5 +9,5 @@ services:
       #- ../../:/gg/
       - ${GGQS_GG_HOME}:/gg/
     environment:
-      - GGQS_AIO_SSH_CLONE_URL
+      - GGQS_AIO_SSH_ORIGIN_URL
     entrypoint: /mnt/scripts/entrypoint.sh
