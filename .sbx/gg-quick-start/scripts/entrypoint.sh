@@ -46,4 +46,7 @@ docker buildx build -t 'git-guardian-t:alpine' . || exit 11
 cd /gg/aio/c/iwcd/7u-container-images/images/u/alpine/git-guardian || exit 12
 docker buildx build -t 'git-guardian-u:alpine' . || exit 13
 
+# shellcheck disable=SC2086
+chown -R ${GG_USER_ID}:${GG_GROUP_ID} /gg
+
 echo "Git Guardian quick start successfully executed!"
