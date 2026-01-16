@@ -1,0 +1,19 @@
+services:
+  gg:
+    image: gg
+    build:
+      context: ./build
+    hostname: gg
+    container_name: gg
+    read_only: true
+    volumes:
+      - ${H_GG_REPO_HOME}:/gg
+      - ${H_GG_USER_HOME}:/home/guardian
+      - gg-tmp:/tmp/
+    entrypoint: sleep infinity
+    environment:
+      - GG_USER_EMAIL
+      - GG_GIT_USER_NAME
+
+volumes:
+  gg-tmp: {}
