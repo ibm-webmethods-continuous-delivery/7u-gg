@@ -47,4 +47,3 @@ cd /gg/aio/c/iwcd/7u-container-images/images/u/alpine/git-guardian || exit 12
 docker buildx build -t 'git-guardian-u:alpine' . || exit 13
 
 echo "Git Guardian quick start successfully executed!"
-
