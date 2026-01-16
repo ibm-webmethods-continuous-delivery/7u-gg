@@ -2,21 +2,11 @@
 
 ## By default point to the 7u-aio template repo, but the user SHOULD provide their own
 
+# This is used for the initial clone as it is a public epo and does not require authentication
 GGQS_AIO_HTTPS_TEMPLATE_CLONE_URL=https://github.com/ibm-webmethods-continuous-delivery/7u-aio.git
-GGQS_AIO_HTTPS_CLONE_URL="${GGQS_AIO_HTTPS_CLONE_URL:-${GGQS_AIO_HTTPS_TEMPLATE_CLONE_URL}}"
 
-GGQS_AIO_SSH_TEMPLATE_CLONE_URL='git@github.com:ibm-webmethods-continuous-delivery/7u-aio.git'
-GGQS_AIO_SSH_CLONE_URL="${GGQS_AIO_SSH_CLONE_URL:-${GGQS_AIO_SSH_TEMPLATE_CLONE_URL}}"
-
-if [ "${GGQS_AIO_SSH_CLONE_URL}" = "${GGQS_AIO_SSH_TEMPLATE_CLONE_URL}" ]; then
-  echo "WARNING: GGQS_AIO_SSH_CLONE_URL env var is incorrectly set, you should set your own repo, derived from the template!"
-  printf 'Do you want to use the default (not recommended) [ Y to continue ] ?'
-  read -r __use_default_aio_repo
-
-  if [ "${__use_default_aio_repo}" != "Y" ]; then
-    exit 1
-  fi
-fi
+# This should point to user's private repo, but may be set afterward2
+GGQS_AIO_SSH_ORIGIN_URL="${GGQS_AIO_SSH_ORIGIN_URL:-none}"
 
 if [ -d /gg/aio ]; then
   echo "ERROR: /gg/aio already exists, you should remove it before running this script!"
@@ -24,13 +14,19 @@ if [ -d /gg/aio ]; then
 fi
 
 git clone \
-  "${GGQS_AIO_HTTPS_CLONE_URL}" \
+  "${GGQS_AIO_HTTPS_TEMPLATE_CLONE_URL}" \
   /gg/aio || exit 3
 
 cd /gg/aio || exit 4
 
-git remote set-url origin "${GGQS_AIO_SSH_ORIGIN_URL}" || exit 5
-
+if [ "${GGQS_AIO_SSH_ORIGIN_URL}" = "none" ]; then
+  echo "WARNING: Private AI Overwatch repository not provided!"
+  echo "Using the public template: you will not be able to push commits!"
+  echo "Eventually change the origin later with the following command!"
+  echo "cd /gg/aio && git remote set-url origin <your-private-repo-ssh-url>"
+else
+  git remote set-url origin "${GGQS_AIO_SSH_ORIGIN_URL}" || exit 5
+fi
 mkdir -p /gg/aio/c/iwcd
 
 git clone \
@@ -51,3 +47,4 @@ cd /gg/aio/c/iwcd/7u-container-images/images/u/alpine/git-guardian || exit 12
 docker buildx build -t 'git-guardian-u:alpine' . || exit 13
 
 echo "Git Guardian quick start successfully executed!"
+
