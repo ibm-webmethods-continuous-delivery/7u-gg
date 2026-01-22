@@ -10,4 +10,6 @@ services:
       - ${GGQS_GG_HOME}:/gg/
     environment:
       - GGQS_AIO_SSH_ORIGIN_URL
+      - GG_USER_ID
+      - GG_GROUP_ID
     entrypoint: /mnt/scripts/entrypoint.sh
