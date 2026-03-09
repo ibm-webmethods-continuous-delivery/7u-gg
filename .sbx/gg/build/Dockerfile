@@ -1,4 +1,4 @@
-ARG __from_image=git-guardian-u:alpine
+ARG __from_image=iwcd-git-guardian-u:alpine
 FROM ${__from_image}
 
 # git-guardian-u:alpine is the fastest way, but encapsulates some decisions.
